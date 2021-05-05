@@ -7,6 +7,8 @@ Docker container for configuring backups of the itzg/minecraft-bedrock-server mi
 
 This was built in part by understanding how itzg/mc-backup works, and is offered under similar license: https://github.com/itzg/docker-mc-backup 
 
+Leverages BedrockifierCLI for the actual backups: https://github.com/Kaiede/BedrockifierCLI
+
 ### Usage
 
 The best way to configure this is to use a docker compose file along with the containers you wish to backup from. An example is under `Examples/docker-compose.yml`
