@@ -10,13 +10,14 @@ if [ "${DEBUG:-false}" == "true" ]; then
   set -x
 fi
 
+: "${DOCKER_PATH:=/usr/bin/docker}"
 : "${DATA_DIR:=/backups}"
 : "${CONFIG_FILE:=config.json}"
 : "${BACKUP_INTERVAL:=${INTERVAL_SEC:-24h}}"
 
 while true; do
   # Fire backup via BedrockifierCLI Tool
-  /opt/bedrock/BedrockifierCLI backupjob "${DATA_DIR}/${CONFIG_FILE}" >&2
+  /opt/bedrock/BedrockifierCLI backupjob "${DATA_DIR}/${CONFIG_FILE}" --dockerPath "${DOCKER_PATH}" --backupPath "${DATA_DIR}" >&2
 
   # If BACKUP_INTERVAL is not a valid number (i.e. 24h), we want to sleep.
   # Only raw numeric value <= 0 will break

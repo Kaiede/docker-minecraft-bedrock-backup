@@ -26,8 +26,6 @@ For the service itself, it should be configured similarly to this:
       BACKUP_INTERVAL: "3h"
       TZ: "America/Los_Angeles"
     volumes:
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - /opt/bedrock/backups:/backups
       - /opt/bedrock/server:/bedrock_server
@@ -47,27 +45,22 @@ config.json for the above example will look like:
 
 ```
 {
-    "dockerPath": "/usr/bin/docker",
-    "backupPath": "/backups",
-    "servers": [
-        {
-            "container": "bedrock_server",
-            "worldsPath": "/bedrock_server/worlds"
-        }
-    ],
-    "trim": [{
+    "servers": {
+        "bedrock_server": "/bedrock_server/worlds"
+    },
+    "trim": {
         "trimDays":   2,
         "keepDays":   14,
         "minKeep":    2
-    }]
+    }
 }
 ```
 
-The key parts here are telling the backup tool about the different servers, where to put backups, and information on the trim configuration. dockerPath and backupPath should not be changed. Put the config.json file in `/opt/bedrock/backups/config.json` if using the above example. 
+The key parts here are telling the backup tool about the different servers, where to put backups, and information on the trim configuration. The servers list is in the format: `"container_name": "/path/to/worlds/folder"`
 
 The above trim configuration will keep all backups from the last 2 days, and trim down to a single backup beyond that, deleting any backup older than 14 days. However, it will retain two copies of any specific world. This last feature is useful
 
-NOTE: The above config.json is rather verbose, as it was meant to be run by systemd originally, and future changes can and will simplify what's required when using the dockerized version. 
+Put the config.json file in `/opt/bedrock/backups/config.json` if using the above example. 
 
 ### Restoring Backups
 

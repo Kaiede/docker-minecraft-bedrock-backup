@@ -1,19 +1,11 @@
 {
-    "dockerPath": "/usr/bin/docker",
-    "backupPath": "/backups",
-    "servers": [
-        {
-            "container": "bedrock_private_1",
-            "worldsPath": "/bedrock_private/worlds"
-        },
-        {
-            "container": "bedrock_public_1",
-            "worldsPath": "/bedrock_public/worlds"
-        }
-    ],
-    "trim": [{
+    "servers": {
+        "bedrock_private": "/bedrock_private/worlds",
+        "bedrock_public": "/bedrock_public/worlds"
+    },
+    "trim": {
         "trimDays":   2,
         "keepDays":   14,
         "minKeep":    2
-    }]
+    }
 }
