@@ -9,6 +9,13 @@ This was built in part by understanding how itzg/mc-backup works, and is offered
 
 Leverages BedrockifierCLI for the actual backups: https://github.com/Kaiede/BedrockifierCLI
 
+### Features
+
+- Makes snapshots of worlds in .mcworld format. Vanilla worlds can easily be imported to a client this way.
+- Takes snapshots of all worlds in the server's worlds folder.
+- Supports trimming backups to limit disk space usage.
+- Properly handles taking snapshots while the server is running.
+
 ### Usage
 
 The best way to configure this is to use a docker compose file along with the containers you wish to backup from. An example is under `Examples/docker-compose.yml`
@@ -58,9 +65,9 @@ config.json for the above example will look like:
 
 The key parts here are telling the backup tool about the different servers, where to put backups, and information on the trim configuration. The servers list is in the format: `"container_name": "/path/to/worlds/folder"`
 
-The above trim configuration will keep all backups from the last 2 days, and trim down to a single backup beyond that, deleting any backup older than 14 days. However, it will retain two copies of any specific world. This last feature is useful
+The above trim configuration will keep all backups from the last 2 days, and trim down to a single backup beyond that, deleting any backup older than 14 days. However, it will retain two copies of any specific world. This last feature is useful if you switch out worlds on a server, to avoid having it delete copies of worlds that aren't in use.
 
-Put the config.json file in `/opt/bedrock/backups/config.json` if using the above example. 
+Put the config.json file in `/opt/bedrock/backups/config.json` if using the above example. Otherwise, it should live in the folder that is mapped to `/backups` in the container.
 
 ### Restoring Backups
 
