@@ -17,7 +17,7 @@ For the service itself, it should be configured similarly to this:
 
 ```
   backup:
-    image: kaiede/mincraft-bedrock-backup
+    image: kaiede/minecraft-bedrock-backup
     name: bedrock_backup
     restart: always
     depends_on:
