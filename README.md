@@ -38,15 +38,18 @@ For the service itself, it should be configured similarly to this:
       - /opt/bedrock/server:/bedrock_server
 ```
 
-The key parts here are:
+Using this example, `/opt/bedrock/backups` on the docker host will contain the world backups. When docker is running as root, this folder is used to demote the service to a non-root account. So something like `myaccount:docker` should be the owner and group of the folder, where `myaccount` is an account with access to `/opt/bedrock/server`. When docker is not running as root, you will need to set UID/GID yourself (see below). 
+
+Configuration notes:
 * The backup container should depend on the server containers, so that the server containers have a chance to fully start before any backups do.
-* `BACKUP_INTERVAL` sets the timing on when to do backups. 
 * Configuring the timezone is optional, but the container will use GMT if it isn't set, and timestamps/trimming of backups will not quite behave the way you expect otherwise.
 * `/var/run/docker.sock` is required to be able to safely save server data. Keep it.
 * `/opt/bedrock/backups` is where the world backups will be stored.
 * `/opt/bedrock/server` in this example is the folder for the dedicated bedrock server. A named volume would work just as well, but makes restoring backups harder.
 
-Using this example, `/opt/bedrock/backups` on the docker host will contain the world backups. It is recommended to use a non-root account for this folder, that is part of the docker group. So something like `myaccount:docker` should be the owner and group of the folder. This folder is used to know which UID/GID to use to demote, and without the correct user/group, the container won't be able to talk to the other containers properly. 
+Environment Variable Notes:
+* `UID` and `GID` can be used to set a specific UID/GID for the process. This is recommended if automatic demotion based on the backups folder doesn't work. GID in this case should be the docker group so it can attach to the server containers to safely backup the data, and UID should be a user with write access to the backups folder, and read access to the server folders.
+* `BACKUP_INTERVAL` sets the timing on when to do backups. 
 
 config.json for the above example will look like:
 
