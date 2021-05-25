@@ -2,7 +2,6 @@
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/kaiede/minecraft-bedrock-backup.svg)](https://hub.docker.com/r/kaiede/minecraft-bedrock-backup)
 
-
 Docker container for configuring backups of the itzg/minecraft-bedrock-server minecraft server.
 
 This was built in part by understanding how itzg/mc-backup works, and is offered under similar license: https://github.com/itzg/docker-mc-backup 
@@ -18,9 +17,28 @@ Leverages BedrockifierCLI for the actual backups: https://github.com/Kaiede/Bedr
 
 ### Usage
 
-The best way to configure this is to use a docker compose file along with the containers you wish to backup from. An example is under `Examples/docker-compose.yml`
+There's a couple of steps required to properly configure this service, since it integrates with both docker and the minecraft server containers you are running. You can find a full example of the configuration files in the `Examples` folder on GitHub. 
 
-For the service itself, it should be configured similarly to this:
+* [Note File Locations](#note-file-locations)
+* [Setup docker-compose.yml](#configure-docker-compose-file)
+* [Setup config.json](#configure-backup-service)
+* [Run](#run)
+
+### Note File Locations
+
+Backups require access to three locations. Make a note of these. 
+
+* Your `docker.sock` file. 
+  * When docker is run as root, this will be `/var/run/docker.dock` usually. When run rootless, you will need to look this up for yourself, but can usually be found by running `echo $DOCKER_HOST`, and should look something like `/run/user/1000/docker.sock`.
+* Your bedrock server folder. 
+  * This will either be a named volume, or a folder on the host. As an example, we will be using `/opt/bedrock/server`.
+  * More details are available 
+* Where you want to put backups.
+  * You will create this yourself. It's recommended to use a host folder. As an example, we will be using `/opt/bedrock/backups`.
+
+### Configure Docker Compose File
+
+In your `docker-compose.yml` file where you configure your minecraft server, you will want to add another service:
 
 ```
   backup:
@@ -35,28 +53,29 @@ For the service itself, it should be configured similarly to this:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /opt/bedrock/backups:/backups
-      - /opt/bedrock/server:/bedrock_server
+      - /opt/bedrock/server:/server
 ```
 
-Using this example, `/opt/bedrock/backups` on the docker host will contain the world backups. When docker is running as root, this folder is used to demote the service to a non-root account. So something like `myaccount:docker` should be the owner and group of the folder, where `myaccount` is an account with access to `/opt/bedrock/server`.
+The service should always depend on all the bedrock servers listed in your `docker-compose.yml` file. We want to let the minecraft servers start before taking a backup on launch. 
 
-Configuration notes:
-* The backup container should depend on the server containers, so that the server containers have a chance to fully start before any backups do.
-* Configuring the timezone is optional, but the container will use GMT if it isn't set, and timestamps/trimming of backups will not quite behave the way you expect otherwise.
-* `/var/run/docker.sock` is required to be able to safely save server data. This path can be used as-is for docker running as root. But if running rootless, make sure it points to the correct `docker.sock` for your docker process. 
-* `/opt/bedrock/backups` is where the world backups will be stored in this example, mapped to `/backups` inside the container.
-* `/opt/bedrock/server` in this example is the folder for the dedicated bedrock server. A named volume would work just as well, but makes restoring backups harder. Should match the volume/folder used by the server you wish to back up.
+For the volumes, we need to configure them this way:
+* Map in `docker.sock`. The above example should work fine for when docker runs as root. When running rootless, take the value you found earlier and include it like so: `/run/user/1000/docker.sock:/var/run/docker.sock`
+* Map in your backups folder. In our example, we put it at `/opt/bedrock/backups` on our host. It should always be mapped into `/backups` in the container.
+* Map in each server folder. Our example has one server, so we map one folder in. You can place it anywhere inside the container, as we will reference it later in the service configuration file. 
 
-Environment Variable Notes:
-* `UID` and `GID` can be used to set a specific UID/GID for the process. This is recommended if automatic demotion based on the backups folder doesn't work, or you don't want the docker group to own the backups folder. GID in this case should be the docker group so it can attach to the server containers to safely backup the data, and UID should be a user with write access to the backups folder, and read access to the server folders.
-* `BACKUP_INTERVAL` sets the timing on when to do backups. 
+Looking at the environment variables, there are a few settings that can be configured here:
+* `BACKUP_INTERVAL`: This configures how often the backups are run. In this example, it is every 3 hours.
+* `TZ`: This sets the timezone. It is optional, but it will use GMT if not set.
+* `UID` and `GID`: Use these when the automatic demotion doesn't work for you. They aren't necessary when running rootless. 
 
-config.json for the above example will look like:
+### Configure Backup Service
+
+Inside your backups folder, you will need to create a `config.json` file. It looks like this:
 
 ```
 {
     "servers": {
-        "bedrock_server": "/bedrock_server/worlds"
+        "bedrock_server": "/server/worlds"
     },
     "trim": {
         "trimDays":   2,
@@ -66,14 +85,25 @@ config.json for the above example will look like:
 }
 ```
 
-The key parts here are telling the backup tool about the different servers, where to put backups, and information on the trim configuration. The servers list is in the format: `"container_name": "/path/to/worlds/folder"`
+Each item under `servers` has the container name, and path to the worlds folder as it appears inside the backup container. The container name must match the one in your `docker-compose.yml` file. For the worlds folder path, in our example we mapped `/opt/bedrock/server` to `/server`, and with the worlds folder at `/opt/bedrock/server/worlds` we should set `/server/worlds` in the json file.
 
-The above trim configuration will keep all backups from the last 2 days, and trim down to a single backup beyond that, deleting any backup older than 14 days. However, it will retain two copies of any specific world. This last feature is useful if you switch out worlds on a server, to avoid having it delete copies of worlds that aren't in use.
+The trim settings have three values:
 
-Put the config.json file in `/opt/bedrock/backups/config.json` if using the above example. Otherwise, it should live in the folder that is mapped to `/backups` in the container.
+* `keepDays`: This is how many days of backups to keep. 14 in the example above means we will keep 14 days worth of backups.
+* `trimDays`: How many days to keep of backups before trimming them down. In this example, the last two days will always have all backups available. But past 2 days (and up to the keep limit), it will trim down to a single backup per day, the last one before midnight. 
+* `minKeep`: A minimum number of backups to keep. This is useful if you switch worlds on your server, as it will make sure you always have a couple backups of any world even if it hasn't been used in a while, and will keep backups past the `keepDays` value.
+
+### Run
+
+Run `docker-compose up` once the above steps are done to verify via the console that the first backup is successful. Then you can stop the containers and restart them using `docker-compose start` to run them in the background like you normally would. 
 
 ### Restoring Backups
 
-Since the backups are stored as .mcworld files, it's straight-forward to stop the server container. Delete the world folder's contents, and then use unzip to unpack the backup into the now-empty world folder. Start the server container again, and you should have a restored server.
+Since the backups are stored as .mcworld files, it also happens to be a zip file. Using the above example, if my world is called "MyWorld", then my restoration looks a bit like this:
 
-Currently, doing it from within the backup container is technically possible (`/opt/bedrock/BedrockifierCLI` has the ability to unpack mcworld files for you), but the server container shouldn't be running when restoring a backup, creating a bit of a catch 22. 
+* `docker-compose stop`
+* `cd /opt/bedrock/server/worlds/MyWorld`
+* `rm -rf *`
+* `unzip /opt/bedrock/backups/MyWorld-<TIMESTAMP>.mcworld`
+
+The tool that runs the backups `BedrockifierCLI` can also pack/unpack worlds a bit more easily, but at the moment, running it from the docker container is a bit of a catch-22 if you made the container dependent on the servers. You don't want the servers to be running when you restore a backup, and the backup container depends on the servers so it can make backups.
