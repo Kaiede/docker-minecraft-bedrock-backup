@@ -56,7 +56,7 @@ In your `docker-compose.yml` file where you configure your minecraft server, you
       - /opt/bedrock/server:/server
 ```
 
-The service should always depend on all the bedrock servers listed in your `docker-compose.yml` file. We want to let the minecraft servers start before taking a backup on launch. 
+The service should always depend on all the bedrock servers listed in your `docker-compose.yml` file. We want to let the minecraft servers start before taking a backup on launch. It is recommended to set `container_name` for each server that will be backed up as docker-compose will assign one automatically if it isn’t set, and this simplifies configuring the backup service. 
 
 For the volumes, we need to configure them this way:
 * Map in `docker.sock`. The above example should work fine for when docker runs as root. When running rootless, take the value you found earlier and include it like so: `/run/user/1000/docker.sock:/var/run/docker.sock`
