@@ -28,6 +28,7 @@ services:
   private:
     image: itzg/minecraft-bedrock-server
     restart: always
+    container_name: bedrock_private
     environment:
       EULA: "TRUE"
     ports:
@@ -42,6 +43,7 @@ services:
   public:
     image: itzg/minecraft-bedrock-server
     restart: always
+    container_name: bedrock_public
     environment:
       EULA: "TRUE"
     ports:
