@@ -67,6 +67,7 @@ Looking at the environment variables, there are a few settings that can be confi
 * `BACKUP_INTERVAL`: This configures how often the backups are run. In this example, it is every 3 hours.
 * `TZ`: This sets the timezone. It is optional, but it will use GMT if not set.
 * `UID` and `GID`: Use these when the automatic demotion doesn't work for you. They aren't necessary when running rootless. 
+* `DATA_DIR`: Use this when you want to change the location of the `/backups` directory to something different within the container. The main reason you might want to do that is if you are using a named volume for backups from multiple sources, and want your minecraft backups to live in a subfolder of that volume. 
 
 ### Configure Backup Service
 
