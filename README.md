@@ -38,7 +38,14 @@ Backups require access to three locations. Make a note of these.
 
 ### Configure Docker Compose File
 
-In your `docker-compose.yml` file where you configure your minecraft server, you will want to add another service:
+In your `docker-compose.yml` file where you configure your minecraft server, you will want to make sure your server container has a couple options set so that the container can be attached to and have commands issued to it:
+
+```
+    stdin_open: true
+    tty: true
+```
+
+Once the options are set on your server container(s), you will want to add another service that will run the backups:
 
 ```
   backup:
