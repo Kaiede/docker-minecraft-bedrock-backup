@@ -6,6 +6,8 @@
 
 Docker container for configuring backups of the itzg/minecraft-bedrock-server minecraft server.
 
+Release log available at: https://github.com/Kaiede/docker-minecraft-bedrock-backup/releases
+
 This was built in part by understanding how itzg/mc-backup works, and is offered under similar license: https://github.com/itzg/docker-mc-backup 
 
 Leverages BedrockifierCLI for the actual backups: https://github.com/Kaiede/BedrockifierCLI
@@ -14,8 +16,8 @@ Leverages BedrockifierCLI for the actual backups: https://github.com/Kaiede/Bedr
 
 - Makes snapshots of worlds in .mcworld format. Vanilla worlds can easily be imported to a client this way.
 - Takes snapshots of all worlds in the server's worlds folder.
+- Takes snapshots while the server is running.
 - Supports trimming backups to limit disk space usage.
-- Properly handles taking snapshots while the server is running.
 
 ### Usage
 
@@ -65,7 +67,9 @@ Once the options are set on your server container(s), you will want to add anoth
       - /opt/bedrock/server:/server
 ```
 
-The service should always depend on all the bedrock servers listed in your `docker-compose.yml` file. We want to let the minecraft servers start before taking a backup on launch. It is recommended to set `container_name` for each server that will be backed up as docker-compose will assign one automatically if it isn’t set, and this simplifies configuring the backup service. 
+The service should always depend on all the bedrock servers listed in your `docker-compose.yml` file. We want to let the minecraft servers start before taking a backup on launch. It is recommended to set `container_name` for each server that will be backed up as docker-compose will assign one automatically if it isn’t set, and this simplifies configuring the backup service.
+
+The service uses a tool called `entrypoint-demoter` to avoid running the service as root. By default it will automatically demote the service to the user and group that owns your backups directory. On some systems you will need to configure this manually, using the environment variables below.
 
 For the volumes, we need to configure them this way:
 * Map in `docker.sock`. The above example should work fine for when docker runs as root. When running rootless, take the value you found earlier and include it like so: `/run/user/1000/docker.sock:/var/run/docker.sock`
