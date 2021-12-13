@@ -4,7 +4,7 @@
 #
 # Used by the docker container
 
-set -euo pipefail
+set -uo pipefail
 
 if [ "${DEBUG:-false}" == "true" ]; then
   set -x
