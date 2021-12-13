@@ -1,3 +1,4 @@
+#### Dec 13th, 2021
 - Container no longer exits when a backup fails, avoiding a restart loop.
 - A running container will be marked unhealthy if backups are failing.
 
