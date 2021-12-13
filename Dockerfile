@@ -27,7 +27,7 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["/usr/local/bin/entrypoint-demoter", "--match", "/backups", "--debug", "--stdin-on-term", "stop", "/opt/bedrock/entry.sh"]
-HEALTHCHECK --start-period=1m CMD /opt/bedrock/healthcheck.sh
+HEALTHCHECK --start-period=1m CMD bash /opt/bedrock/healthcheck.sh
 
 ARG EASY_ADD_VERSION=0.7.0
 ADD https://github.com/itzg/easy-add/releases/download/${EASY_ADD_VERSION}/easy-add_linux_${ARCH} /usr/local/bin/easy-add
