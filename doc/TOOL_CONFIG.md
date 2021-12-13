@@ -43,6 +43,6 @@ This is meant for the rare cases where files on disk need to be a very specific 
 
 This functionality may break trimming of backups if it causes the service to no longer be able to have write permissions to the backups.
 
-* `chown`: This sets the owner and group on backed up mcworld files. It works much like the `chown` command's argument, but only accepts ids, not names.
+* `chown`: This sets the owner and group on backed up mcworld files. It works much like the `chown` command's argument, but only accepts ids, not names. **Using this requires the service to run as root which is not recommended.**
 
 * `permissions`: Sets unix permissions for the backed up files. This is the standard POSIX bitmask in string form. 

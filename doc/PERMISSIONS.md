@@ -1,4 +1,4 @@
-# Configurating Permissions
+# Configuring Permissions
 
 Permissions in simple cases can be handled automatically, but in many cases, there is a need for users to configure the permissions manually.
 
@@ -14,9 +14,9 @@ In cases where you need to override the user and group that is picked for you by
 
 ### Overriding Permissions on Backed Up Worlds
 
-In the `config.json`, there is an **EXPERIMENTAL** feature that allows you to override the user, group, and permissions for the backups. It is only recommended to do this if you absolutely have to, such as running it on a NAS device that requires specific ownership and permissions. 
+In the `config.json`, there is an **EXPERIMENTAL** feature that allows you to override the user, group, and permissions for the backups. It is only recommended to do this if you absolutely have to, such as running it on a NAS device that requires specific ownership and permissions.
 
-**This may break backup trimming.**
+**Using chown requires running the service as root which is not recommended!**
 
 ```
   ...
