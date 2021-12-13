@@ -1,8 +1,8 @@
 # docker-minecraft-bedrock-backup
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/kaiede/minecraft-bedrock-backup.svg)](https://hub.docker.com/r/kaiede/minecraft-bedrock-backup)
-[![GitHub Issues](https://img.shields.io/github/issues-raw/kaiede/minecraft-bedrock-backup.svg)](https://github.com/kaiede/minecraft-bedrock-backup/issues)
-[![Build](https://github.com/itzg/docker-minecraft-bedrock-server/workflows/Build/badge.svg)](https://github.com/kaiede/minecraft-bedrock-backup/actions?query=workflow%3ABuild)
+[![GitHub Issues](https://img.shields.io/github/issues-raw/kaiede/docker-minecraft-bedrock-backup.svg)](https://github.com/kaiede/docker-minecraft-bedrock-backup/issues)
+[![Build](https://github.com/kaiede/docker-minecraft-bedrock-backup/workflows/Build/badge.svg)](https://github.com/kaiede/docker-minecraft-bedrock-backup/actions?query=workflow%3ABuild)
 
 Docker container for configuring backups of the itzg/minecraft-bedrock-server minecraft server.
 
