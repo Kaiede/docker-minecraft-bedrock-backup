@@ -1,5 +1,5 @@
 ###### BUILDER
-FROM swift:5.4 as builder
+FROM swift:5.5 as builder
 WORKDIR /project
 
 ARG COMMIT=main
@@ -14,7 +14,7 @@ RUN git checkout ${COMMIT}
 RUN swift build -c release
 
 ###### RUNTIME CONTAINER
-FROM swift:5.4-slim
+FROM swift:5.5-slim
 
 ARG ARCH=amd64
 
