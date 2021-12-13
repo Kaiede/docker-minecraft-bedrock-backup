@@ -4,7 +4,7 @@
 #
 # Used by the docker container
 
-set -euo pipefail
+set -uo pipefail
 
 if [ "${DEBUG:-false}" == "true" ]; then
   set -x
@@ -18,6 +18,12 @@ fi
 while true; do
   # Fire backup via BedrockifierCLI Tool
   /opt/bedrock/BedrockifierCLI backupjob "${DATA_DIR}/${CONFIG_FILE}" --dockerPath "${DOCKER_PATH}" --backupPath "${DATA_DIR}" >&2
+
+  if [ $? != 0 ]; then
+    touch "${DATA_DIR}/unhealthy"
+  elif [ -e "${DATA_DIR}/unhealthy" ]; then
+    rm "${DATA_DIR}/unhealthy"
+  fi
 
   # If BACKUP_INTERVAL is not a valid number (i.e. 24h), we want to sleep.
   # Only raw numeric value <= 0 will break
