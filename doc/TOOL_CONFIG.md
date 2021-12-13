@@ -37,11 +37,11 @@ It is controlled by the following settings:
 
 * `minKeep`: A minimum number of backups to keep. This is useful if you switch worlds on your server, as it will make sure you always have a couple backups of any world even if it hasn't been used in a while. This will override keepDays, and let you keep at least this many backups indefinitely.
 
-### Ownership (EXPERIMENTAL)
+### Ownership
 
 This is meant for the rare cases where files on disk need to be a very specific user and group, and/or have specific permissions. NAS devices being one example. It allows you to tell the service how to set ownership and permissions on the backups written to disk.
 
-This functionality may break trimming of backups if it causes the service to no longer be able to have write permissions to the backups.
+This functionality may break trimming of backups if it causes the service to no longer be able to have write permissions to the backups. Use with caution.
 
 * `chown`: This sets the owner and group on backed up mcworld files. It works much like the `chown` command's argument, but only accepts ids, not names. **Using this requires the service to run as root which is not recommended.**
 
