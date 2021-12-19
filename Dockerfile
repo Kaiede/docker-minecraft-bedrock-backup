@@ -35,7 +35,8 @@ RUN chmod +x /usr/local/bin/easy-add
 
 RUN easy-add --var version=0.2.1 --var app=entrypoint-demoter --file {{.app}} --from https://github.com/itzg/{{.app}}/releases/download/{{.version}}/{{.app}}_{{.version}}_linux_${ARCH}.tar.gz
 
-COPY --from=builder /project/.build/release/BedrockifierCLI .
+COPY --from=builder /project/.build/release/bedrockifiertool .
+COPY --from=builder /project/.build/release/bedrockifierd .
 COPY entry.sh .
 COPY healthcheck.sh .
 
