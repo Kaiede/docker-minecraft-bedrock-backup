@@ -19,4 +19,4 @@ fi
 
 # Fire backup via BedrockifierCLI Tool
 #/opt/bedrock/bedrockifiertool backupjob "${DATA_DIR}/${CONFIG_FILE}" --dockerPath "${DOCKER_PATH}" --backupPath "${DATA_DIR}" >&2
-/opt/bedrock/bedrockifierd "${DATA_DIR}/${CONFIG_FILE}" --dockerPath "${DOCKER_PATH}" --backupPath "${DATA_DIR}" >&2
+/opt/bedrock/bedrockifierd "${DATA_DIR}/${CONFIG_FILE}" --docker-path "${DOCKER_PATH}" --backup-path "${DATA_DIR}" >&2
