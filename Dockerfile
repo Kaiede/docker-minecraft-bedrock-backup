@@ -14,7 +14,7 @@ RUN git checkout ${COMMIT}
 RUN swift build -c release
 
 ###### RUNTIME CONTAINER
-FROM swift:5.5-slim
+FROM swift:5.5.2-slim
 
 ARG ARCH=amd64
 
