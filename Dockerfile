@@ -1,5 +1,5 @@
 ###### BUILDER
-FROM swift:5.5 as builder
+FROM swift:5.5.2 as builder
 WORKDIR /project
 
 ARG COMMIT=main
