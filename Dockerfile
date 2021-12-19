@@ -26,7 +26,8 @@ RUN apt-get update && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ["/usr/local/bin/entrypoint-demoter", "--match", "/backups", "--debug", "--stdin-on-term", "stop", "/opt/bedrock/entry.sh"]
+ENV DOCKER_PATH=/usr/bin/docker
+ENTRYPOINT ["/usr/local/bin/entrypoint-demoter", "--match", "/backups", "--debug", "--stdin-on-term", "stop", "/opt/bedrock/bedrockifierd"]
 HEALTHCHECK --start-period=1m CMD bash /opt/bedrock/healthcheck.sh
 
 ARG EASY_ADD_VERSION=0.7.0
