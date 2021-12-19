@@ -12,11 +12,10 @@ fi
 
 : "${DOCKER_PATH:=/usr/bin/docker}"
 : "${DATA_DIR:=/backups}"
-: "${CONFIG_FILE:=config.yaml}"
+: "${CONFIG_FILE:=config.yml}"
 : "${BACKUP_INTERVAL:=${INTERVAL_SEC:-24h}}"
 
 # TODO: Handle backwards compat here looking for a config.json and/or yaml by default.
 
 # Fire backup via BedrockifierCLI Tool
-#/opt/bedrock/bedrockifiertool backupjob "${DATA_DIR}/${CONFIG_FILE}" --dockerPath "${DOCKER_PATH}" --backupPath "${DATA_DIR}" >&2
 /opt/bedrock/bedrockifierd "${DATA_DIR}/${CONFIG_FILE}" --docker-path "${DOCKER_PATH}" --backup-path "${DATA_DIR}" >&2
