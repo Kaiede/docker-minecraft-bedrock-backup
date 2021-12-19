@@ -38,6 +38,5 @@ RUN easy-add --var version=0.2.1 --var app=entrypoint-demoter --file {{.app}} --
 
 COPY --from=builder /project/.build/release/bedrockifier-tool .
 COPY --from=builder /project/.build/release/bedrockifierd .
-COPY entry.sh .
 COPY healthcheck.sh .
 
