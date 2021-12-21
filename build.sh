@@ -22,7 +22,10 @@ render() {
 ARCHES=(arm64 amd64)
 for ARCH in ${ARCHES[*]}; do
     echo Building: $ARCH
-    rm Dockerfile
+    if [ -e Dockerfile ]; then
+        rm Dockerfile
+    fi
+
     image=baseimage_$ARCH
     eval image=\${$image}
     echo Using Image: $image
@@ -52,31 +55,3 @@ if [ "$PUSH" == "push" ]; then
 
     docker manifest push kaiede/minecraft-bedrock-backup:${TAG}
 fi
-
-#docker buildx build . \
-#    --platform linux/arm64,linux/amd64 \
-#    -t kaiede/minecraft-bedrock-backup:${TAG} \
-#    --build-arg QEMU_CPU=max \
-#    --build-arg CACHEBUST=$(date +%s) \
-#    --build-arg COMMIT=${COMMIT}
-
-#docker build arm64 \
-#    --platform linux/arm64 \
-#    -t kaiede/minecraft-bedrock-backup:arm64-${TAG} \
-#    --build-arg QEMU_CPU=max \
-#    --build-arg CACHEBUST=$(date +%s) \
-#    --build-arg COMMIT=${COMMIT}
-
-#docker build amd64 \
-#    --platform linux/amd64 \
-#    -t kaiede/minecraft-bedrock-backup:amd64-${TAG} \
-#    --build-arg QEMU_CPU=max \
-#    --build-arg CACHEBUST=$(date +%s) \
-#    --build-arg COMMIT=${COMMIT}
-
-#docker push kaiede/minecraft-bedrock-backup:arm64-${TAG}
-#docker push kaiede/minecraft-bedrock-backup:amd64-${TAG}
-#docker manifest create \
-#    kaiede/minecraft-bedrock-backup:${TAG} \
-#    kaiede/minecraft-bedrock-backup:arm64-${TAG} \
-#    kaiede/minecraft-bedrock-backup:amd64-${TAG} 
