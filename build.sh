@@ -32,7 +32,7 @@ for ARCH in ${ARCHES[*]}; do
     render Dockerfile.template > Dockerfile
 
     docker build . \
-        --platform linux/${ARCH} \
+        --platform=linux/${ARCH} \
         -t kaiede/minecraft-bedrock-backup:${ARCH}-${TAG} \
         --build-arg QEMU_CPU=max \
         --build-arg CACHEBUST=$(date +%s) \
