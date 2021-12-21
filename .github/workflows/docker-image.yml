@@ -34,15 +34,7 @@ jobs:
       run: echo "::set-output name=date::$(date +%s)"
         
     - name: Build and push
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: kaiede/minecraft-bedrock-backup:${{ env.docker_tag }}
-        build-args: |
-          CACHEBUST=${{ steps.date.outputs.date }} |
-          COMMIT=main
-      
+      run: bash build.sh ${{ env.docker_tag }} main ${{ github.event_name != 'pull_request' && 'push' || 'nopush' }}      
     
       
     
