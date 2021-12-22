@@ -1,4 +1,4 @@
-#### In 'test'
+#### v1.0.3 - Dec 21st, 2021
 - Updated to Swift 5.5 compiler.
 - The property "tty: true" is no longer required on the server container.
 - New "ownership" configuration for the backup allows changing the owner, group, and permissions on backups written. Changing the owner and group requires running as root, which isn't recommended. Trimming also may not work properly if the backup tool loses write access. Use with caution.
