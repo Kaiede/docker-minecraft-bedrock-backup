@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Renders the final Dockerfiles for building
 
