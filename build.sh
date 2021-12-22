@@ -20,7 +20,7 @@ fi
 
 . render.sh $arch
 
-dockerTag=$dockerRepo:${arch}-${tag}
+dockerTag=$dockerRepo:${tag}-${arch}
 dockerfile=$arch.dockerfile
 
 docker build . -f $dockerfile \
