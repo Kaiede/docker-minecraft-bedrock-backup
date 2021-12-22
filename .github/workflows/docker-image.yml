@@ -50,7 +50,7 @@ jobs:
       with:
         builder: ${{ steps.buildx.outputs.name }}
         context: .
-        file: ./Dockerfile
+        file: ./amd64.dockerfile
         platforms: linux/amd64
         push: ${{ github.event_name != 'pull_request' }}
         tags: kaiede/docker-minecraft-bedrock-backup:${{ env.docker_tag }}-amd64
