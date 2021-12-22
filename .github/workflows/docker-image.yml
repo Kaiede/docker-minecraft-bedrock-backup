@@ -55,8 +55,9 @@ jobs:
         push: ${{ github.event_name != 'pull_request' }}
         tags: kaiede/docker-minecraft-bedrock-backup:${{ env.docker_tag }}-amd64
         build-args: |
-          CACHEBUST=${{ steps.date.outputs.date }} |
+          CACHEBUST=${{ steps.date.outputs.date }}
           COMMIT=main
+          ARCH=amd64
 
     - name: Build arm64
       uses: docker/build-push-action@v2
@@ -68,8 +69,9 @@ jobs:
         push: ${{ github.event_name != 'pull_request' }}
         tags: kaiede/docker-minecraft-bedrock-backup:${{ env.docker_tag }}-arm64
         build-args: |
-          CACHEBUST=${{ steps.date.outputs.date }} |
+          CACHEBUST=${{ steps.date.outputs.date }}
           COMMIT=main
+          ARCH=arm64
 
     - name: Merge Manifests
       if: github.event_name != 'pull_request'
