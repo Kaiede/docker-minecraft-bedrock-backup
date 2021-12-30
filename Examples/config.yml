@@ -10,6 +10,8 @@ containers:
     - name: java_public
       worlds:
         - /java_public/PublicJavaWorld
+schedule:
+  interval: 3h
 trim:
   trimDays: 2
   keepDays: 14
