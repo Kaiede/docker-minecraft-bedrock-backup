@@ -5,12 +5,12 @@
 [![Build](https://github.com/kaiede/docker-minecraft-bedrock-backup/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/kaiede/docker-minecraft-bedrock-backup/actions?query=workflow%3A%22Docker+Image+CI%22)
 [![Release Notes](https://img.shields.io/badge/Release-1.0.2-brightgreen.svg?style=flat)](https://github.com/Kaiede/docker-minecraft-bedrock-backup/releases)
 
-Docker container for configuring backups of the itzg/minecraft-bedrock-server minecraft server.
+Docker container for configuring backups of the Minecraft [Bedrock](https://hub.docker.com/r/itzg/minecraft-bedrock-server) [Java](https://hub.docker.com/r/itzg/minecraft-server) docker containers provided by itzg.
 
 ### Features
 
-- Makes snapshots of worlds in .mcworld format. Vanilla worlds can easily be imported to a client this way.
-- Takes snapshots of all worlds in the server's worlds folder.
+- Bedrock backups use the .mcworld format, meaning Vanilla worlds can be imported using any Bedrock client.
+- Java backups use the same .zip backup format as the game client, making them easier to work with.
 - Takes snapshots while the server is running.
 - Supports trimming backups to limit disk space usage.
 
@@ -49,12 +49,11 @@ Once the options are set on your server container(s), you will want to add anoth
 ```
   backup:
     image: kaiede/minecraft-bedrock-backup
-    name: bedrock_backup
+    name: minecraft_backup
     restart: always
     depends_on:
       - "bedrock_server"
     environment:
-      BACKUP_INTERVAL: "3h"
       TZ: "America/Los_Angeles"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -64,11 +63,12 @@ Once the options are set on your server container(s), you will want to add anoth
 
 The service should always depend on all the bedrock servers listed in your `docker-compose.yml` file. We want to let the minecraft servers start before taking a backup on launch. It is recommended to set `container_name` for each server that will be backed up for ease of configuration later.
 
-In most cases, you only need to configure these environment variables. [A full list is available here](doc/VARIABLES.md).
-* `BACKUP_INTERVAL`: This configures how often the backups are run. In this example, it is every 3 hours.
+In most cases, you only need to configure the timezone for the container, but there are more variables available. [A full list is available here](doc/VARIABLES.md).
 * `TZ`: This sets the timezone. It is optional, but it will use GMT if not set.
 
-For the volumes, they need to be configured
+> NOTE: BACKUP_INTERVAL is now part of the configuration file, and has been deprecated. It is currently still supported, but it is recommended to move to specifying the schedule in the configuration YAML.
+
+For the volumes, they need to be configured as such:
 * Map in `docker.sock`. The above example should work fine for when docker runs as root. When running rootless, take the value you found earlier and include it like so: `/run/user/1000/docker.sock:/var/run/docker.sock`
 * Map in your backups folder. In our example, we put it at `/opt/bedrock/backups` on our host. It should always be mapped into `/backups` in the container.
 * Map in each server folder. This can be mapped anywhere in the container, but we use `/server` above for simplicity.
@@ -79,22 +79,31 @@ In many cases, the default behavior of having the user and group set from your `
 
 ### Configure Backup Service
 
-Inside your backups folder, you will need to create a `config.json` file. A quick overview is below, while [more detail is available here](doc/TOOL_CONFIG.md)
+Inside your backups folder, you will need to create a `config.yml` file. A quick overview is below, while [more detail is available here](doc/TOOL_CONFIG.md)
+
+> NOTE: The previous JSON format is still supported in backwards-compatibility, but it is recommended to switch to using YAML, which is more readable
 
 ```
-{
-    "servers": {
-        "bedrock_server": "/server/worlds"
-    },
-    "trim": {
-        "trimDays":   2,
-        "keepDays":   14,
-        "minKeep":    2
-    }
-}
+containers:
+  bedrock:
+    - name: bedrock_server
+      worlds:
+        - /server/worlds/MyWorld
+schedule:
+  interval: 3h
+trim:
+  trimDays: 2
+  keepDays: 14
+  minKeep: 2
 ```
 
-Each item under `servers` has the container name, and path to the worlds folder as it appears inside the backup container. The container name must match the one provided by `docker ps`, or `container_name` in your `docker-compose.yml` file. The worlds folder path needs to be the path internal to the container. So in the example above, `/opt/bedrock/server/worlds` will become `/server/worlds` in the config file.
+Containers has two sub-nodes, `bedrock` and `java`. Under each is a list of containers you want to backup. `name` is the name of the docker container and must match the one provided by `docker ps`, or `container_name` in your `docker-compose.yml` file. `worlds` is another list of paths to each world. This path is the backup container's file path to the world. So in the example above, `/opt/bedrock/server/worlds/MyWorld` will become `/server/worlds/MyWorld` in the config file.
+
+Make sure to put each server under the correct heading, as doing live backups is slightly different for each, and the service needs to know which type it is working with. 
+
+> NOTE: The previous "servers" list is supported via backwards-compatibility, but has been deprecated. It's recommended you update to using the containers structure instead.
+
+Currently, the schedule only supports the `interval` setting. This can be set to be in terms of seconds, minutes or hours. So `600s`, `60m` or `3h` are all valid ways to specify the interface. 
 
 The basic trim settings above will keep backups for 14 days, only keep 1 backup per day after 2 days, and always keep a minimum of 2 backups per world. Trimming is [discussed in detail here](doc/TOOL_CONFIG.md). 
 

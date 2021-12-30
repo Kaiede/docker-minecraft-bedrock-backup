@@ -1,29 +1,38 @@
 # Backup Tool Config File
 
 ```
-{
-    "servers": {
-        "<container>": "<path>"
-    },
-    "trim": {
-        "trimDays":   2,
-        "keepDays":   14,
-        "minKeep":    2
-    },
-    "ownership": {
-        "chown": "1000:1001",
-        "permissions": "644"
-    }
-}
+containers:
+  bedrock:
+    - name: <container name>
+      worlds:
+        - <world path>
+  java:
+    - name: <container name>
+      worlds:
+        - <world path>
+schedule:
+  interval: <interval>
+trim:
+  trimDays: 2
+  keepDays: 14
+  minKeep: 2
+loggingLevel: [debug or trace]
+ownership:
+  chown: 1000:1001
+  permissions: 644
 ```
 
-### Servers
+### Containers
 
-This section lists all the servers to be backed up, and informs the tool how to talk to docker, and where to find the worlds. 
+This section lists all the servers to be backed up, and informs the tool how to talk to docker, and where to find the worlds. It is split into `bedrock` and `java`. Put Bedrock servers under `bedrock` and Java servers under `java` and it will properly back each type up in the correct way.
 
-* `<container>`: This is the name of the docker container to be backed up. Something like `minecraft_server` as an example. It needs to match the name visible in `docker ps`, or the `container_name` setting in docker-compose.yml. 
+* `<container name>`: This is the name of the docker container to be backed up. Something like `minecraft_server` as an example. It needs to match the name visible in `docker ps`, or the `container_name` setting in docker-compose.yml. 
 
-* `<path>`: This is the internal path to the worlds folder of the server. For example, if you mapped `/opt/bedrock/server` to `/server` in your `docker-compose.yml`, then this path should be `/server/worlds`
+* `<world path>`: This is the internal path to the world folder you want to backup. For example, if you mapped `/opt/bedrock/server` to `/server` in your `docker-compose.yml`, then this path should be `/server/worlds/<MyWorldName>`
+
+### Schedule
+
+* `interval`: This is the timing on backups, specified in hours, minutes, or seconds. So you can use values like: `600s`, `60m` or `3h` to set how often the backup is kicked off. 
 
 ### Trim
 
@@ -36,6 +45,10 @@ It is controlled by the following settings:
 * `trimDays`: How many days to keep of backups before trimming them down. Setting this to 2 days, with a 3 hour backup interval means that for the last 2 days, you'll keep all the 3 hour backups. After 2 days, the backups will get trimmed down to just a single daily backup, up to the keepDays limit. 
 
 * `minKeep`: A minimum number of backups to keep. This is useful if you switch worlds on your server, as it will make sure you always have a couple backups of any world even if it hasn't been used in a while. This will override keepDays, and let you keep at least this many backups indefinitely.
+
+### Logging Level
+
+* `loggingLevel`: This can be set to `debug` or `trace` to enable extra logging for diagnostic purposes. In most cases, it's fine to leave it out of your config file unless reporting a bug. 
 
 ### Ownership
 

@@ -1,0 +1,18 @@
+containers:
+  bedrock:
+    - name: bedrock_private
+      worlds:
+        - /bedrock_private/worlds/PrivateWorld
+    - name: bedrock_public
+      worlds:
+        - /bedrock_public/worlds/PublicWorld
+  java:
+    - name: java_public
+      worlds:
+        - /java_public/PublicJavaWorld
+schedule:
+  interval: 3h
+trim:
+  trimDays: 2
+  keepDays: 14
+  minKeep: 14
