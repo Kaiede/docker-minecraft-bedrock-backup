@@ -8,13 +8,13 @@ services:
       - "public"
       - "private"
     environment:
-        BACKUP_INTERVAL: "3h"
         TZ: "America/Los_Angeles"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /opt/bedrock/backups:/backups
       - /opt/bedrock/private:/bedrock_private
       - /opt/bedrock/public:/bedrock_public
+      - /opt/java/public:/java_public
     
   manymine:
     image: illiteratealliterator/manymine
@@ -54,3 +54,17 @@ services:
     tty: true
     labels:
       - manymine.enable=true
+      
+  java_public
+    image: itgz/minecraft-server
+    restart: always
+    container_name: java_public
+    environment:
+      EULA: "TRUE"
+      LEVEL: "PublicJavaWorld"
+    ports:
+      - 25565:25565
+    volumes:
+      - /opt/java/public:/data
+    stdin_open: true
+    tty: true
