@@ -66,6 +66,8 @@ The service should always depend on all the bedrock servers listed in your `dock
 In most cases, you only need to configure the timezone for the container, but there are more variables available. [A full list is available here](doc/VARIABLES.md).
 * `TZ`: This sets the timezone. It is optional, but it will use GMT if not set.
 
+> NOTE: BACKUP_INTERVAL is now part of the configuration file, and has been deprecated. It is currently still supported, but it is recommended to move to specifying the schedule in the configuration YAML.
+
 For the volumes, they need to be configured as such:
 * Map in `docker.sock`. The above example should work fine for when docker runs as root. When running rootless, take the value you found earlier and include it like so: `/run/user/1000/docker.sock:/var/run/docker.sock`
 * Map in your backups folder. In our example, we put it at `/opt/bedrock/backups` on our host. It should always be mapped into `/backups` in the container.
@@ -79,7 +81,7 @@ In many cases, the default behavior of having the user and group set from your `
 
 Inside your backups folder, you will need to create a `config.yml` file. A quick overview is below, while [more detail is available here](doc/TOOL_CONFIG.md)
 
-> NOTE: The previous JSON format is still supported in backwards-compatibility, but it is recommended to switch to using YML, which is more readable
+> NOTE: The previous JSON format is still supported in backwards-compatibility, but it is recommended to switch to using YAML, which is more readable
 
 ```
 containers:
@@ -87,6 +89,8 @@ containers:
     - name: bedrock_server
       worlds:
         - /server/worlds/MyWorld
+schedule:
+  interval: 3h
 trim:
   trimDays: 2
   keepDays: 14
@@ -97,7 +101,9 @@ Containers has two sub-nodes, `bedrock` and `java`. Under each is a list of cont
 
 Make sure to put each server under the correct heading, as doing live backups is slightly different for each, and the service needs to know which type it is working with. 
 
-> NOTE: The previous "servers" list is supported via backwards-compatibility, but has been deprecated. It's recommended you update to using 
+> NOTE: The previous "servers" list is supported via backwards-compatibility, but has been deprecated. It's recommended you update to using the containers structure instead.
+
+Currently, the schedule only supports the `interval` setting. This can be set to be in terms of seconds, minutes or hours. So `600s`, `60m` or `3h` are all valid ways to specify the interface. 
 
 The basic trim settings above will keep backups for 14 days, only keep 1 backup per day after 2 days, and always keep a minimum of 2 backups per world. Trimming is [discussed in detail here](doc/TOOL_CONFIG.md). 
 
