@@ -53,7 +53,7 @@ jobs:
         file: ./arm64.dockerfile
         platforms: linux/arm64
         push: ${{ github.event_name != 'pull_request' }}
-        tags: kaiede/docker-minecraft-bedrock-backup:${{ env.docker_tag }}-arm64
+        tags: kaiede/minecraft-bedrock-backup:${{ env.docker_tag }}-arm64
         build-args: |
           CACHEBUST=${{ steps.date.outputs.date }}
           COMMIT=main
@@ -67,7 +67,7 @@ jobs:
         file: ./amd64.dockerfile
         platforms: linux/amd64
         push: ${{ github.event_name != 'pull_request' }}
-        tags: kaiede/docker-minecraft-bedrock-backup:${{ env.docker_tag }}-amd64
+        tags: kaiede/minecraft-bedrock-backup:${{ env.docker_tag }}-amd64
         build-args: |
           CACHEBUST=${{ steps.date.outputs.date }}
           COMMIT=main
