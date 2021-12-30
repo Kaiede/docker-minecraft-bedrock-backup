@@ -75,5 +75,5 @@ jobs:
 
     - name: Merge Manifests
       if: github.event_name != 'pull_request'
-      run: bash merge.sh
+      run: bash merge.sh ${{ env.docker_tag }}
       
