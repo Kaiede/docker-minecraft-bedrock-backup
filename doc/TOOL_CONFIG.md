@@ -10,14 +10,16 @@ containers:
     - name: <container name>
       worlds:
         - <world path>
+schedule:
+  interval: <interval>
 trim:
   trimDays: 2
   keepDays: 14
   minKeep: 2
+loggingLevel: [debug or trace]
 ownership:
   chown: 1000:1001
   permissions: 644
-loggingLevel: [debug or trace]
 ```
 
 ### Containers
@@ -27,6 +29,10 @@ This section lists all the servers to be backed up, and informs the tool how to 
 * `<container name>`: This is the name of the docker container to be backed up. Something like `minecraft_server` as an example. It needs to match the name visible in `docker ps`, or the `container_name` setting in docker-compose.yml. 
 
 * `<world path>`: This is the internal path to the world folder you want to backup. For example, if you mapped `/opt/bedrock/server` to `/server` in your `docker-compose.yml`, then this path should be `/server/worlds/<MyWorldName>`
+
+### Schedule
+
+* `interval`: This is the timing on backups, specified in hours, minutes, or seconds. So you can use values like: `600s`, `60m` or `3h` to set how often the backup is kicked off. 
 
 ### Trim
 
