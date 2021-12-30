@@ -5,7 +5,7 @@
 [![Build](https://github.com/kaiede/docker-minecraft-bedrock-backup/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/kaiede/docker-minecraft-bedrock-backup/actions?query=workflow%3A%22Docker+Image+CI%22)
 [![Release Notes](https://img.shields.io/badge/Release-1.0.2-brightgreen.svg?style=flat)](https://github.com/Kaiede/docker-minecraft-bedrock-backup/releases)
 
-Docker container for configuring backups of the Minecraft [Bedrock](https://hub.docker.com/r/itzg/minecraft-bedrock-server) [Java](https://hub.docker.com/r/itzg/minecraft-server) docker containers provided by itzg.
+Docker container for configuring backups of the Minecraft [Bedrock](https://hub.docker.com/r/itzg/minecraft-bedrock-server) and [Java](https://hub.docker.com/r/itzg/minecraft-server) docker containers provided by itzg.
 
 ### Features
 
