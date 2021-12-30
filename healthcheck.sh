@@ -12,7 +12,7 @@ fi
 
 : "${DATA_DIR:=/backups}"
 
-if [ -e "${DATA_DIR}/unhealthy" ]; then
+if [ ! -e "${DATA_DIR}/.service_is_healthy" ]; then
   exit 1
 fi
 
