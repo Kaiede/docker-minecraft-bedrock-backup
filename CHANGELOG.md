@@ -1,6 +1,6 @@
 #### v1.1 - In Test
 - Updated to Swift 5.5.2 compiler.
-- Converted to a service instead of a script running a tool in a loop. This will enable new features in the future.
+- Converted to a service instead of a script running a tool in a loop. This enables the new scheduler features.
 - Java containers can now be backed up, using the new `containers` settings in the configuration file.
 - Configuration parsing now supports YAML format, and defaults to 'config.yml'. For compatibility, 'config.json' will be checked as a fallback.
 - Configuration file now has a `schedule` section which replaces the environment variables. 
