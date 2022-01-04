@@ -4,7 +4,8 @@
 - Java containers can now be backed up, using the new `containers` settings in the configuration file.
 - Configuration parsing now supports YAML format, and defaults to 'config.yml'. For compatibility, 'config.json' will be checked as a fallback.
 - Configuration file now has a `schedule` section which replaces the environment variables. 
-  - `interval` is the same as before. 
+  - `interval` is the same as before.
+  - `startupDelay` delays the first backup by the interval given, instead of running it on startup.
   - `daily` performs a single daily backup, mutually exclusive with `interval`.
   - `onPlayerLogin` performs a backup whenever a player logs in.
   - `onPlayerLogout` performs a backup whenever a player logs out.
