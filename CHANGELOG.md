@@ -1,9 +1,16 @@
 #### v1.1 - In Test
 - Updated to Swift 5.5.2 compiler.
-- Converted to a service instead of a script running a tool in a loop. This will enable new features in the future.
+- Converted to a service instead of a script running a tool in a loop. This enables the new scheduler features.
 - Java containers can now be backed up, using the new `containers` settings in the configuration file.
 - Configuration parsing now supports YAML format, and defaults to 'config.yml'. For compatibility, 'config.json' will be checked as a fallback.
-- Configuration file now has a `schedule` section which replaces the environment variables. Currently it only supports `interval` as a schedule option, with new options being possible in the future.
+- Configuration file now has a `schedule` section which replaces the environment variables. 
+  - `interval` is the same as before.
+  - `startupDelay` delays the first backup by the interval given, instead of running it on startup.
+  - `daily` performs a single daily backup, mutually exclusive with `interval`.
+  - `onPlayerLogin` performs a backup whenever a player logs in.
+  - `onPlayerLogout` performs a backup whenever a player logs out.
+  - `onLastLogout` performs a backup whenever the last player logs out.
+  - `minInterval` throttles event/interval backups to a maximum of one during the minimum interval (i.e. 4h means one backup every 4h maximum). 
 - Logging is now less verbose. There is a `loggingLevel` option in the configuration to make it verbose again for diagnostic purposes.
 
 The following has been deprecated. They still currently work today, but are not expected to be supported at some point in the future.
