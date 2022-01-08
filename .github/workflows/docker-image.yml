@@ -80,6 +80,9 @@ jobs:
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +%s)"
+        
+    - name: Render Dockerfiles
+      run: bash render.sh all
       
     - name: Build amd64
       uses: docker/build-push-action@v2
