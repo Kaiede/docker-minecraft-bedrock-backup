@@ -1,4 +1,4 @@
-#### v1.1 - In Test
+#### v1.1 - Jan 7th, 2022
 - Updated to Swift 5.5.2 compiler.
 - Converted to a service instead of a script running a tool in a loop. This enables the new scheduler features.
 - Java containers can now be backed up, using the new `containers` settings in the configuration file.
