@@ -6,6 +6,10 @@
 
 Docker container for configuring backups of the Minecraft [Bedrock](https://hub.docker.com/r/itzg/minecraft-bedrock-server) and [Java](https://hub.docker.com/r/itzg/minecraft-server) docker containers provided by itzg.
 
+This container uses https://github.com/Kaiede/Bedrockifier as the service and command line tool to do all the work. 
+
+**To make development easier this repo has been merged with Bedrockifier, and will be archived going forward. Please bring all issues to  https://github.com/Kaiede/Bedrockifier**
+
 ### Features
 
 - Bedrock backups use the .mcworld format, meaning Vanilla worlds can be imported using any Bedrock client.
@@ -25,4 +29,4 @@ Release Notes are available on [GitHub](https://github.com/Kaiede/docker-minecra
 
 This was built in part by understanding how itzg/mc-backup works for Java, and is offered under similar license: https://github.com/itzg/docker-mc-backup 
 
-Leverages BedrockifierCLI for the actual backups: https://github.com/Kaiede/BedrockifierCLI
+
