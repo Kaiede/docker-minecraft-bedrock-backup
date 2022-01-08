@@ -9,6 +9,7 @@ services:
       - "private"
     environment:
         TZ: "America/Los_Angeles"
+    tty: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /opt/bedrock/backups:/backups
